@@ -36,56 +36,108 @@
                 })
             
             });
+           
 
 
-
-
-
-           app.post('/log',function (req, res)  {
-                var unmae=req.body.uname;
+            app.post('/log',function (req, res)  {
+               var email=req.body.email;
                 var password=req.body.password;
-                session
-                .run('CREATE(n:Login{uname:{unameparam}  , password:{passowrdparam}RETURN n',{unameparam,passwordparam})
+               session
+                .run('MATCH (n:Register {email: {emailparam}}) RETURN n' ,{emailparam: email})
                 .then(function(result){
+                    result.records.forEach(function(records){
+                        console.log(records._fields[0].properties);
+                        var a=records._fields[0].properties;
+                        if(a.psw==password){
+                            console.log("correct")
+                            res.end("congrz")
+                        }
+                        else{
+                            console.log("failed")
+                            res.end("failed ")
+                      }
 
-                     res.redirect('/');
-                     session.close();
+                        
+                   })
+
 
                 })
-                .catch(function(err){
+                .catch(function(err)
+                {
                     console.log(err);
+                });
+
+
+
+                app.post('/adminlog',function(req,res){
+                    var adminname=req.body.admin;
+                    var password=req.body.password;
+                    session
+                    .run('MATCH(n:adminlog{ name:{adminparam}})RETURN n',{adminparam:adminname})
+                    .then(function(result){
+                        result.records.forEach(function(records){
+                            console.log(records._fields[0].properties);
+                            var a=records._fields[0].properties;
+                            if(a.psw==password){
+                                console.log("correct")
+                                res.end("congrz")
+                            }
+                            else{
+                                console.log("failed")
+                                res.end("failed ")
+                          }
+    
+                            
+                       })
+    
+    
+                    })
+                    .catch(function(err)
+                    {
+                        console.log(err);
+                    });
+
+
+                    app.post('/adminview',function(req,res){
+                        session
+                        .run('MATCH(n:adminview')
+                        .then(function(result){
+                            var view=[];
+                            result.records.forEach(function(records){
+                                view.push({
+                                    id:records._fields[0].identity.low,
+                                    name:records._fields[0].identity.name,
+                                    email:records._fields[0].identity.email
+                                    
+
+
+                                })
+                            })
+
+                        })
+
+                    })
+
+                    })
+                    
+                
                 })
-                
-            });
-            app.post('log',function (req, res)  {
-                var uname=req.body.uname;
-                var password=req.body.password;
-                session
-                .run('MATCH(a:Register{name:{nameParam}}) ,email:{emailParam} ,psw:{pswParam}}) ,(b:Login{uname:{unameparam}  ,password:{passwordparam})  MERGE(a)-[r:RELATION]-(b)  RETURN a,b',{nameparam:name,pawwordparam:password})
-                
-            });
-
-
-
-
             
-
 
             app.get('/',function(req,res){
                 res.render('index');
 
             })
-
-
-
-
-            app.get('/',function(req,res){
+           app.get('/login',function(req,res){
                 res.render('login');
             })
-
-            app.post(function(req,res){
-
+            app.get('/adminlog',function(req,res){
+                res.render('adminlog');
+            })
+            app.get('/adminview',function(req,res){
+                res.render('adminview');
             })
             app.listen(3000)
             console.log('Server started on port 3000')
             module.exports=app;
+        
