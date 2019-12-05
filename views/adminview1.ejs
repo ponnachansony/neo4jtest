@@ -1,0 +1,18 @@
+<form method="post" action="/adminlog">
+    <label>admin movie</label>
+    
+
+</form>
+<form method="post" action="/login">
+    <label>login</label>
+
+
+
+</form>
+<ul>
+    <% adminlog.forEach(function(adminlog){ %>
+        <li><%= adminlog.title%>
+
+        </li>
+        <%})%>
+</ul>

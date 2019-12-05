@@ -1,0 +1,29 @@
+<form method="post" action="/relationview">
+   
+<!--names-->   
+    <select name="name">
+                <% rela.forEach(function(Register){ %> 
+        
+          <option><%= Register.name %></option>
+        
+          <% }) %>
+
+        </select>
+        <!--relation-->
+        <select name="relation">
+            
+                    <option>staff</option>
+                   <option>student</option>
+                    <option>HM</option>
+                   <option>HOD</option>
+                   <option>Teacher</option>
+                   <option>Library Admin</option>
+
+        </select>
+        <button type="submit">view relation</button>
+        
+    </form>
+      
+
+
+
